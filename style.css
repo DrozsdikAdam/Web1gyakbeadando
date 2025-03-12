@@ -4,3 +4,7 @@
     text-decoration: none;
 
 }
+.navbar-brand {
+    font-family: "Righteous", cursive;
+    font-size: 26px;
+}
