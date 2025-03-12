@@ -1,10 +1,21 @@
-#loginBtn
-{
-    color: white;
-    text-decoration: none;
 
+#loginBtn {
+  color: white;
+  text-decoration: none;
 }
 .navbar-brand {
-    font-family: "Righteous", cursive;
-    font-size: 26px;
+  font-family: "Righteous", cursive;
+  font-size: 26px;
+}
+#firstPop,
+#secondPop,
+#thirdPop {
+    width: 200px;
+    height: 200px;
+    margin: auto;
+}
+.card:hover{
+    box-shadow: 2px 2px 5px grey;
+    background-color: rgb(232, 232, 232);
+    
 }

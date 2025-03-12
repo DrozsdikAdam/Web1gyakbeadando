@@ -24,7 +24,7 @@ const fetchProducts = () => {
             firsttext.innerHTML = arraysorted[0].title;
             secondtext.innerHTML = arraysorted[1].title;
             thirdtext.innerHTML = arraysorted[2].title;
-
+            //jewlery, electronics, men's clothing, woman's clothing, 
 
         });
     });
