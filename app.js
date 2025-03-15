@@ -20,60 +20,65 @@ const fetchProducts = () => {
 
       generateCards("homePopular");
       generateCards("homeClothes");
-
-      //jewlery, electronics, men's clothing, woman's clothing,
+      generateCards("homeJewelery");
+      //jewelery, electronics, men's clothing, woman's clothing,
       //PopularCards();
     });
   });
 };
 
 const generateCards = (location) => {
-  let Parent;
-  let array = [];;
-  let until;
-  let ids;
-  if (location === "homePopular") {
-    parent = document.getElementById("homePopular");
-    array = sorted;
-    until = 3;
-  } else if (location === "homeClothes") {
-    parent = document.getElementById("homeClothes");
-    for (let item of sorted) if(item.BigCategory == "Clothes")array.push(item)
-    until = 3;
-  } else if (location === "Jewlery") {
-
-  } else {
-
-  }
-  for (let i = 0; i < until; i++) {
-    let div = document.createElement("div");
-    div.classList = "card border border-dark-subtle mx-md-2 my-2 p-2 col-md";
-    parent.appendChild(div);
-    let img = document.createElement("img");
-    img.src = array[i].image;
-    img.classList = "object-fit-contain cardpic rounded card-img-top img-fluid";
-    div.appendChild(img);
-    let div2 = document.createElement("div");
-    div2.classList = "card-body d-flex flex-column justify-content-between";
-    div.appendChild(div2);
-    let p1 = document.createElement("p");
-    p1.classList = "card-text text-center";
-    p1.innerHTML = array[i].title;
-    div2.appendChild(p1);
-    let p2 = document.createElement("p");
-    p2.classList = "card-text px-3";
-    div2.appendChild(p2);
-    let span1 = document.createElement("span");
-    span1.classList = "category";
-    span1.innerHTML = array[i].category;
-    p2.appendChild(span1);
-    let span2 = document.createElement("span");
-    span2.classList = "price";
-    span2.innerHTML = array[i].price + "$";
-    p2.appendChild(span2);
-    generateButtons(array, div2, i, location);
-  }
-};
+    let parent;
+    let array = [];
+    let until;
+    if (location === "homePopular") {
+      parent = document.getElementById("homePopular");
+      array = sorted;
+      until = 3;
+    } else if (location === "homeClothes") {
+      parent = document.getElementById("homeClothes");
+      for (let item of sorted) {
+        if (item.BigCategory === "Clothes") {
+          array.push(item);
+        }
+      }
+      until = 3;
+    } else if (location === "homeJewelery") {
+      parent = document.getElementById("homeJewelery");
+      for (let item of sorted) if (item.category === "jewelery")array.push(item);
+      until = 3;
+    } else {
+      // Add logic for other categories if needed
+    }
+    for (let i = 0; i < until; i++) {
+      let div = document.createElement("div");
+      div.classList = "card border border-dark-subtle mx-md-2 my-2 p-2 col-md";
+      parent.appendChild(div);
+      let img = document.createElement("img");
+      img.src = array[i].image;
+      img.classList = "object-fit-contain cardpic rounded card-img-top img-fluid";
+      div.appendChild(img);
+      let div2 = document.createElement("div");
+      div2.classList = "card-body d-flex flex-column justify-content-between";
+      div.appendChild(div2);
+      let p1 = document.createElement("p");
+      p1.classList = "card-text text-center";
+      p1.innerHTML = array[i].title;
+      div2.appendChild(p1);
+      let p2 = document.createElement("p");
+      p2.classList = "card-text px-3";
+      div2.appendChild(p2);
+      let span1 = document.createElement("span");
+      span1.classList = "category";
+      span1.innerHTML = array[i].category;
+      p2.appendChild(span1);
+      let span2 = document.createElement("span");
+      span2.classList = "price";
+      span2.innerHTML = array[i].price + "$";
+      p2.appendChild(span2);
+      generateButtons(array, div2, i, location);
+    }
+  };
 
 const generateButtons = (array, parent, current, location) => {
   let div = document.createElement("div");
