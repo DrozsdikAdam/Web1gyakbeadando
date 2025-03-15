@@ -1,5 +1,8 @@
 var allproducts;
 var sorted;
+var subarrayClothes;
+var subarrayJewelery;
+var subarrayElectronics;
 var quantity = 0;
 var cart = [];
 
@@ -11,9 +14,12 @@ const fetchProducts = () => {
       let products = response;
       for (let product of products) {
         product.quantity = 0;
-        if (product.category === "men's clothing" || product.category === "women's clothing") {
+        if (
+          product.category === "men's clothing" ||
+          product.category === "women's clothing"
+        ) {
           product.BigCategory = "Clothes";
-        } 
+        }
       }
       allproducts = products;
       sorted = products.sort((a, b) => b.rating.rate - a.rating.rate);
@@ -27,59 +33,63 @@ const fetchProducts = () => {
 };
 
 const generateCards = (location) => {
-    let parent;
-    let array = [];
-    let until;
-    if (location === "homePopular") {
-      parent = document.getElementById("homePopular");
-      array = sorted;
-      until = 3;
-    } else if (location === "homeClothes") {
-      parent = document.getElementById("homeClothes");
-      for (let item of sorted) {
-        if (item.BigCategory === "Clothes") {
-          array.push(item);
-        }
+  let parent;
+  let array = [];
+  let until;
+  if (location === "homePopular") {
+    parent = document.getElementById("homePopular");
+    array = sorted;
+    until = 4;
+  } else if (location === "homeClothes") {
+    parent = document.getElementById("homeClothes");
+    for (let item of sorted) {
+      if (item.BigCategory === "Clothes") {
+        array.push(item);
       }
-      until = 3;
-    } else if (location === "homeJewelery") {
-      parent = document.getElementById("homeJewelery");
-      for (let item of sorted) if (item.category === "jewelery")array.push(item);
-      until = 3;
-    } else  if (location === "homeElectronics") {
-        parent = document.getElementById("homeElectronics");
-        for (let item of sorted) if (item.category === "electronics")array.push(item);
-        until = 3;
     }
-    for (let i = 0; i < until; i++) {
-      let div = document.createElement("div");
-      div.classList = "card border border-dark-subtle mx-md-2 my-2 p-2 col-md";
-      parent.appendChild(div);
-      let img = document.createElement("img");
-      img.src = array[i].image;
-      img.classList = "object-fit-contain cardpic rounded card-img-top img-fluid";
-      div.appendChild(img);
-      let div2 = document.createElement("div");
-      div2.classList = "card-body d-flex flex-column justify-content-between";
-      div.appendChild(div2);
-      let p1 = document.createElement("p");
-      p1.classList = "card-text text-center";
-      p1.innerHTML = array[i].title;
-      div2.appendChild(p1);
-      let p2 = document.createElement("p");
-      p2.classList = "card-text px-3";
-      div2.appendChild(p2);
-      let span1 = document.createElement("span");
-      span1.classList = "category";
-      span1.innerHTML = array[i].category;
-      p2.appendChild(span1);
-      let span2 = document.createElement("span");
-      span2.classList = "price";
-      span2.innerHTML = array[i].price + "$";
-      p2.appendChild(span2);
-      generateButtons(array, div2, i, location);
-    }
-  };
+    subarrayClothes = array;
+    until = 4;
+  } else if (location === "homeJewelery") {
+    parent = document.getElementById("homeJewelery");
+    for (let item of sorted) if (item.category === "jewelery") array.push(item);
+    subarrayJewelery = array;
+    until = 4;
+  } else if (location === "homeElectronics") {
+    parent = document.getElementById("homeElectronics");
+    for (let item of sorted)
+      if (item.category === "electronics") array.push(item);
+    subarrayElectronics = array;
+    until = 4;
+  }
+  for (let i = 0; i < until; i++) {
+    let div = document.createElement("div");
+    div.classList = "card border border-dark-subtle mx-md-2 my-2 p-2 col-md";
+    parent.appendChild(div);
+    let img = document.createElement("img");
+    img.src = array[i].image;
+    img.classList = "object-fit-contain cardpic rounded card-img-top img-fluid";
+    div.appendChild(img);
+    let div2 = document.createElement("div");
+    div2.classList = "card-body d-flex flex-column justify-content-between";
+    div.appendChild(div2);
+    let p1 = document.createElement("p");
+    p1.classList = "card-text text-center";
+    p1.innerHTML = array[i].title;
+    div2.appendChild(p1);
+    let p2 = document.createElement("p");
+    p2.classList = "card-text px-3";
+    div2.appendChild(p2);
+    let span1 = document.createElement("span");
+    span1.classList = "category";
+    span1.innerHTML = array[i].category;
+    p2.appendChild(span1);
+    let span2 = document.createElement("span");
+    span2.classList = "price";
+    span2.innerHTML = array[i].price + "$";
+    p2.appendChild(span2);
+    generateButtons(array, div2, i, location);
+  }
+};
 
 const generateButtons = (array, parent, current, location) => {
   let div = document.createElement("div");
@@ -94,56 +104,143 @@ const generateButtons = (array, parent, current, location) => {
 };
 
 const checkCard = (current, array, location, parent) => {
-    if (array[current].quantity === 0) {
-      let container = document.getElementById(location + current);
-      container === null ? null : parent.removeChild(container);
-      let div = document.createElement("div");
-      div.classList = "btn-group mx-2";
-      div.id = location + current;
-      parent.appendChild(div);
-      let button = document.createElement("button");
-      button.classList = "gomb text-center";
-      button.innerHTML = "Add";
-      button.onclick = () => Cart("Add", current, location, array, parent);
-      div.appendChild(button);
-    } else {
-      let container = document.getElementById(location + current);
-      container === null ? null : parent.removeChild(container);
-      let div = document.createElement("div");
-      div.classList = "btn-group mx-2";
-      div.id = location + current;
-      parent.appendChild(div);
-      let button1 = document.createElement("button");
-      button1.classList = "btn btn-danger";
-      button1.innerHTML = "-";
-      button1.onclick = () => Cart("-", current, location, array, parent);
-      div.appendChild(button1);
-      let input = document.createElement("input");
-      input.type = "text";
-      input.value = array[current].quantity; // Use array[current].quantity
-      input.id = "count";
-      input.classList = "text-center btn";
-      input.disabled = true;
-      div.appendChild(input);
-      let button2 = document.createElement("button");
-      button2.classList = "btn btn-success";
-      button2.innerHTML = "+";
-      button2.onclick = () => Cart("+", current, location, array, parent);
-      div.appendChild(button2);
-    }
-  };
+  if (array[current].quantity === 0) {
+    let container = document.getElementById(location + current);
+    container === null ? null : parent.removeChild(container);
+    let div = document.createElement("div");
+    div.classList = "btn-group mx-2";
+    div.id = location + current;
+    parent.appendChild(div);
+    let button = document.createElement("button");
+    button.classList = "gomb text-center";
+    button.innerHTML = "Add";
+    button.onclick = () => Cart("Add", current, location, array, parent);
+    div.appendChild(button);
+  } else {
+    let container = document.getElementById(location + current);
+    container === null ? null : parent.removeChild(container);
+    let div = document.createElement("div");
+    div.classList = "btn-group mx-2";
+    div.id = location + current;
+    parent.appendChild(div);
+    let button1 = document.createElement("button");
+    button1.classList = "btn btn-danger";
+    button1.innerHTML = "-";
+    button1.onclick = () => Cart("-", current, location, array, parent);
+    div.appendChild(button1);
+    let input = document.createElement("input");
+    input.type = "text";
+    input.value = array[current].quantity;
+    input.id = "count";
+    input.classList = "text-center btn";
+    input.disabled = true;
+    div.appendChild(input);
+    let button2 = document.createElement("button");
+    button2.classList = "btn btn-success";
+    button2.innerHTML = "+";
+    button2.onclick = () => Cart("+", current, location, array, parent);
+    div.appendChild(button2);
+  }
+};
+
+const updateCards = (parent, loc, array, current) => {
+  if (array[current].category === "jewelery") {
+    for (let i = 0; i < 4; i++) {
+
+        if(array.length === 20){
+            if(array[current].title === subarrayJewelery[i].title){
+            loc = "homePopular";
+            console.log(loc+current)
+            parent = document.getElementById(loc+current).parentElement;
+            checkCard(current, sorted, loc, parent);
+            loc = "homeJewelery";
+            console.log(loc+i)
+            parent = document.getElementById(loc+i).parentElement;
+            checkCard(i, subarrayJewelery, loc, parent);
+            }
+        }else{
+            if(array[current].title === sorted[i].title)
+                {
+                loc = "homePopular";
+                parent = document.getElementById(loc+i).parentElement;
+                console.log(loc+i)
+                checkCard(i, sorted, loc, parent);
+                loc = "homeJewelery";
+                console.log(loc+current)
+                parent = document.getElementById(loc+current).parentElement;
+                checkCard(current, subarrayJewelery, loc, parent);
+            }
+        }
+
+      }
+  } else if (array[current].category === "electronics") {
+    for (let i = 0; i < 4; i++) {
+
+        if(array.length === 20){
+            if(array[current].title === subarrayElectronics[i].title){
+            loc = "homePopular";
+            parent = document.getElementById(loc+current).parentElement;
+            console.log(loc+current)
+            checkCard(current, sorted, loc, parent);
+            loc = "homeElectronics";
+            console.log(loc+i)
+            parent = document.getElementById(loc+i).parentElement;
+            checkCard(i, subarrayElectronics, loc, parent);
+            }
+        }else{
+            if(array[current].title === sorted[i].title)
+                {
+                loc = "homePopular";
+                parent = document.getElementById(loc+i).parentElement;
+                console.log(loc+i)
+                checkCard(i, sorted, loc, parent);
+                loc = "homeElectronics";
+                console.log(loc+current)
+                parent = document.getElementById(loc+current).parentElement;
+                checkCard(current, subarrayElectronics, loc, parent);
+            }
+        }
+
+      }
+  }else{
+    for (let i = 0; i < 4; i++) {
+
+        if(array.length === 20){
+            if(array[current].title === subarrayClothes[i].title){
+            loc = "homePopular";
+            parent = document.getElementById(loc+current).parentElement;
+            console.log(array[current]);
+            checkCard(current, sorted, loc, parent);
+            loc = "homeClothes";
+            parent = document.getElementById(loc+i).parentElement;
+            checkCard(i, subarrayClothes, loc, parent);
+            }
+        }else{
+            if(array[current].title === sorted[i].title){
+                loc = "homePopular";
+                parent = document.getElementById(loc+i).parentElement;
+                console.log(loc+i)
+                checkCard(i, sorted, loc, parent);
+                loc = "homeClothes";
+                parent = document.getElementById(loc+current).parentElement;
+                checkCard(current, subarrayClothes, loc, parent);
+            }
+        }
+
+      }
+  }
+};
 
 const Cart = (dir, current, loc, array, parent) => {
+  
   for (const item of allproducts) {
     if (item.title === array[current].title) {
       if (dir === "Add") {
         item.quantity++;
         cart.push(item);
-      } else if (dir === "-") {
-        item.quantity--;
-      } else {
-        item.quantity++;
-      }
+        updateCards(parent, loc, array, current);
+      } else if (dir === "-") item.quantity--;
+      else item.quantity++;
       for (const item of cart) {
         if (item.quantity === 0 && item.title === array[current].title) {
           cart.splice(cart.indexOf(item), 1);
