@@ -131,7 +131,7 @@ const checkCard = (current, array, location, parent) => {
     let input = document.createElement("input");
     input.type = "text";
     input.value = array[current].quantity;
-    input.id = "count";
+    input.id = location + current + "count";
     input.classList = "text-center btn";
     input.disabled = true;
     div.appendChild(input);
@@ -146,101 +146,92 @@ const checkCard = (current, array, location, parent) => {
 const updateCards = (parent, loc, array, current) => {
   if (array[current].category === "jewelery") {
     for (let i = 0; i < 4; i++) {
+      if (array.length === 20) {
+        if (array[current].title === subarrayJewelery[i].title) {
+          loc = "homePopular";
 
-        if(array.length === 20){
-            if(array[current].title === subarrayJewelery[i].title){
-            loc = "homePopular";
-            console.log(loc+current)
-            parent = document.getElementById(loc+current).parentElement;
-            checkCard(current, sorted, loc, parent);
-            loc = "homeJewelery";
-            console.log(loc+i)
-            parent = document.getElementById(loc+i).parentElement;
-            checkCard(i, subarrayJewelery, loc, parent);
-            }
-        }else{
-            if(array[current].title === sorted[i].title)
-                {
-                loc = "homePopular";
-                parent = document.getElementById(loc+i).parentElement;
-                console.log(loc+i)
-                checkCard(i, sorted, loc, parent);
-                loc = "homeJewelery";
-                console.log(loc+current)
-                parent = document.getElementById(loc+current).parentElement;
-                checkCard(current, subarrayJewelery, loc, parent);
-            }
+          parent = document.getElementById(loc + current).parentElement;
+          checkCard(current, sorted, loc, parent);
+          loc = "homeJewelery";
+
+          parent = document.getElementById(loc + i).parentElement;
+          checkCard(i, subarrayJewelery, loc, parent);
         }
+      } else {
+        if (array[current].title === sorted[i].title) {
+          loc = "homePopular";
+          parent = document.getElementById(loc + i).parentElement;
 
+          checkCard(i, sorted, loc, parent);
+          loc = "homeJewelery";
+
+          parent = document.getElementById(loc + current).parentElement;
+          checkCard(current, subarrayJewelery, loc, parent);
+        }
       }
+    }
   } else if (array[current].category === "electronics") {
     for (let i = 0; i < 4; i++) {
-
-        if(array.length === 20){
-            if(array[current].title === subarrayElectronics[i].title){
-            loc = "homePopular";
-            parent = document.getElementById(loc+current).parentElement;
-            console.log(loc+current)
-            checkCard(current, sorted, loc, parent);
-            loc = "homeElectronics";
-            console.log(loc+i)
-            parent = document.getElementById(loc+i).parentElement;
-            checkCard(i, subarrayElectronics, loc, parent);
-            }
-        }else{
-            if(array[current].title === sorted[i].title)
-                {
-                loc = "homePopular";
-                parent = document.getElementById(loc+i).parentElement;
-                console.log(loc+i)
-                checkCard(i, sorted, loc, parent);
-                loc = "homeElectronics";
-                console.log(loc+current)
-                parent = document.getElementById(loc+current).parentElement;
-                checkCard(current, subarrayElectronics, loc, parent);
-            }
+      if (array.length === 20) {
+        if (array[current].title === subarrayElectronics[i].title) {
+          loc = "homePopular";
+          parent = document.getElementById(loc + current).parentElement;
+          checkCard(current, sorted, loc, parent);
+          loc = "homeElectronics";
+          parent = document.getElementById(loc + i).parentElement;
+          checkCard(i, subarrayElectronics, loc, parent);
         }
-
+      } else {
+        if (array[current].title === sorted[i].title) {
+          loc = "homePopular";
+          parent = document.getElementById(loc + i).parentElement;
+          checkCard(i, sorted, loc, parent);
+          loc = "homeElectronics";
+          parent = document.getElementById(loc + current).parentElement;
+          checkCard(current, subarrayElectronics, loc, parent);
+        }
       }
-  }else{
+    }
+  } else {
     for (let i = 0; i < 4; i++) {
+      if (array.length === 20) {
+        if (array[current].title === subarrayClothes[i].title) {
+          loc = "homePopular";
+          parent = document.getElementById(loc + current).parentElement;
 
-        if(array.length === 20){
-            if(array[current].title === subarrayClothes[i].title){
-            loc = "homePopular";
-            parent = document.getElementById(loc+current).parentElement;
-            console.log(array[current]);
-            checkCard(current, sorted, loc, parent);
-            loc = "homeClothes";
-            parent = document.getElementById(loc+i).parentElement;
-            checkCard(i, subarrayClothes, loc, parent);
-            }
-        }else{
-            if(array[current].title === sorted[i].title){
-                loc = "homePopular";
-                parent = document.getElementById(loc+i).parentElement;
-                console.log(loc+i)
-                checkCard(i, sorted, loc, parent);
-                loc = "homeClothes";
-                parent = document.getElementById(loc+current).parentElement;
-                checkCard(current, subarrayClothes, loc, parent);
-            }
+          checkCard(current, sorted, loc, parent);
+          loc = "homeClothes";
+          parent = document.getElementById(loc + i).parentElement;
+          checkCard(i, subarrayClothes, loc, parent);
         }
-
+      } else {
+        if (array[current].title === sorted[i].title) {
+          loc = "homePopular";
+          parent = document.getElementById(loc + i).parentElement;
+          checkCard(i, sorted, loc, parent);
+          loc = "homeClothes";
+          parent = document.getElementById(loc + current).parentElement;
+          checkCard(current, subarrayClothes, loc, parent);
+        }
       }
+    }
   }
+
+  //nagy if be else ágba pedig be kell másolni és a check helyett egy quantity beírás a loc+szám+"count" formátumú index re
 };
 
 const Cart = (dir, current, loc, array, parent) => {
-  
   for (const item of allproducts) {
     if (item.title === array[current].title) {
       if (dir === "Add") {
         item.quantity++;
         cart.push(item);
         updateCards(parent, loc, array, current);
-      } else if (dir === "-") item.quantity--;
-      else item.quantity++;
+      } else if (dir === "-") {
+        item.quantity--;
+      } else {
+        item.quantity++;
+      }
       for (const item of cart) {
         if (item.quantity === 0 && item.title === array[current].title) {
           cart.splice(cart.indexOf(item), 1);
