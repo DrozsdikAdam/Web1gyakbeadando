@@ -102,7 +102,11 @@ const Cart = (dir, title, loc) => {
   }
   if (loc === "Popular")PopularCards();
   
-  document.getElementById("itemcount1").innerHTML = cart.length;
-  document.getElementById("itemcount2").innerHTML = cart.length;
-  console.log(cart);
+  if (cart.length === 0 ) {
+    document.getElementById("itemcount1").innerHTML = null;
+    document.getElementById("itemcount2").innerHTML = null;
+  }else{
+    document.getElementById("itemcount1").innerHTML = cart.length;
+    document.getElementById("itemcount2").innerHTML = cart.length;
+  }
 };
