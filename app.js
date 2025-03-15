@@ -39,7 +39,8 @@ const PopularCards = () => {
     }
     let Cardbody = document.getElementById("PopularCard" + i);
     if (quantity === 0) {
-        document.getElementById("contdiv" + i) === null ? null : Cardbody.removeChild("contdiv" + i);
+        let container = document.getElementById("contdiv" + i);
+        container === null ? null : Cardbody.removeChild(container);
       let div = document.createElement("div");
       div.classList = "btn-group mx-2";
       div.id = "contdiv" + i;
@@ -47,9 +48,11 @@ const PopularCards = () => {
       let button = document.createElement("button");
       button.classList = "gomb text-center";
       button.innerHTML = "Add";
+      button.onclick = () => Cart("Add", sorted[i].title, "Popular");
       div.appendChild(button);
     } else {
-        document.getElementById("contdiv" + i) === null ? null : Cardbody.removeChild("contdiv" + i);
+        let container = document.getElementById("contdiv" + i);
+        container === null ? null : Cardbody.removeChild(container);
       let div = document.createElement("div");
       div.classList = "btn-group mx-2";
       div.id = "contdiv" + i;
@@ -57,6 +60,7 @@ const PopularCards = () => {
       let button1 = document.createElement("button");
       button1.classList = "btn btn-danger";
       button1.innerHTML = "-";
+      button1.onclick = () => Cart("-", sorted[i].title, "Popular");
       div.appendChild(button1);
       let input = document.createElement("input");
       input.type = "text";
@@ -68,7 +72,37 @@ const PopularCards = () => {
       let button2 = document.createElement("button");
       button2.classList = "btn btn-success";
       button2.innerHTML = "+";
+      button2.onclick = () => Cart("+", sorted[i].title, "Popular");
       div.appendChild(button2);
     }
   }
+};
+
+const Cart = (dir, title, loc) => {
+  for (const item of allproducts) {
+    if (item.title === title) {
+        if (dir === "Add") {
+            item.quantity++;
+            cart.push(item);
+        } else if (dir === "-") {
+            item.quantity--;
+        } else {
+            item.quantity++;
+        }
+      for (const item of cart) {
+        if (item.quantity === 0 && item.title === title) {
+          cart.splice(cart.indexOf(item), 1);
+        } else if(item.title === title) {
+          cart.splice(cart.indexOf(item), 1);
+          cart.push(item);
+        }
+      }
+      break;
+    }
+  }
+  if (loc === "Popular")PopularCards();
+  
+  document.getElementById("itemcount1").innerHTML = cart.length;
+  document.getElementById("itemcount2").innerHTML = cart.length;
+  console.log(cart);
 };
