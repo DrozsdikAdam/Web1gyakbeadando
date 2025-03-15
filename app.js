@@ -5,66 +5,116 @@ var cart = [];
 
 const fetchProducts = () => {
   fetch("https://fakestoreapi.com/products").then((res) => {
-    //console.log(res);
     res.json().then((response) => {
       console.log(response);
 
       let products = response;
-      for (let product of products) product.quantity = 0;
+      for (let product of products) {
+        product.quantity = 0;
+        if (product.category === "men's clothing" || product.category === "women's clothing") {
+          product.BigCategory = "Clothes";
+        } 
+      }
       allproducts = products;
-      sorted = products.sort((a, b) => a.rating.rate - b.rating.rate);
+      sorted = products.sort((a, b) => b.rating.rate - a.rating.rate);
 
-      let firstpic = document.getElementById("firstPop");
-      let secondpic = document.getElementById("secondPop");
-      let thirdpic = document.getElementById("thirdPop");
-      let firsttext = document.getElementById("firstText");
-      let secondtext = document.getElementById("secondText");
-      let thirdtext = document.getElementById("thirdText");
-      firstpic.src = sorted[0].image;
-      secondpic.src = sorted[1].image;
-      thirdpic.src = sorted[2].image;
-      firsttext.innerHTML = sorted[0].title;
-      secondtext.innerHTML = sorted[1].title;
-      thirdtext.innerHTML = sorted[2].title;
+      generateCards("homePopular");
+      generateCards("homeClothes");
+
       //jewlery, electronics, men's clothing, woman's clothing,
-      PopularCards();
+      //PopularCards();
     });
   });
 };
 
-const PopularCards = () => {
-  for (let i = 1; i < 4; i++) {
-    for (const item of allproducts) {
-      if (item.title === sorted[i].title) quantity = item.quantity;
-    }
-    let Cardbody = document.getElementById("PopularCard" + i);
-    if (quantity === 0) {
-        let container = document.getElementById("contdiv" + i);
-        container === null ? null : Cardbody.removeChild(container);
+const generateCards = (location) => {
+  let Parent;
+  let array = [];;
+  let until;
+  let ids;
+  if (location === "homePopular") {
+    parent = document.getElementById("homePopular");
+    array = sorted;
+    until = 3;
+  } else if (location === "homeClothes") {
+    parent = document.getElementById("homeClothes");
+    for (let item of sorted) if(item.BigCategory == "Clothes")array.push(item)
+    until = 3;
+  } else if (location === "Jewlery") {
+
+  } else {
+
+  }
+  for (let i = 0; i < until; i++) {
+    let div = document.createElement("div");
+    div.classList = "card border border-dark-subtle mx-md-2 my-2 p-2 col-md";
+    parent.appendChild(div);
+    let img = document.createElement("img");
+    img.src = array[i].image;
+    img.classList = "object-fit-contain cardpic rounded card-img-top img-fluid";
+    div.appendChild(img);
+    let div2 = document.createElement("div");
+    div2.classList = "card-body d-flex flex-column justify-content-between";
+    div.appendChild(div2);
+    let p1 = document.createElement("p");
+    p1.classList = "card-text text-center";
+    p1.innerHTML = array[i].title;
+    div2.appendChild(p1);
+    let p2 = document.createElement("p");
+    p2.classList = "card-text px-3";
+    div2.appendChild(p2);
+    let span1 = document.createElement("span");
+    span1.classList = "category";
+    span1.innerHTML = array[i].category;
+    p2.appendChild(span1);
+    let span2 = document.createElement("span");
+    span2.classList = "price";
+    span2.innerHTML = array[i].price + "$";
+    p2.appendChild(span2);
+    generateButtons(array, div2, i, location);
+  }
+};
+
+const generateButtons = (array, parent, current, location) => {
+  let div = document.createElement("div");
+  div.classList = "btn-group mx-2";
+  div.id = location + current;
+  parent.appendChild(div);
+  let button = document.createElement("button");
+  button.classList = "gomb text-center";
+  button.innerHTML = "Add";
+  button.onclick = () => Cart("Add", current, location, array, parent);
+  div.appendChild(button);
+};
+
+const checkCard = (current, array, location, parent) => {
+    if (array[current].quantity === 0) {
+      let container = document.getElementById(location + current);
+      container === null ? null : parent.removeChild(container);
       let div = document.createElement("div");
       div.classList = "btn-group mx-2";
-      div.id = "contdiv" + i;
-      Cardbody.appendChild(div);
+      div.id = location + current;
+      parent.appendChild(div);
       let button = document.createElement("button");
       button.classList = "gomb text-center";
       button.innerHTML = "Add";
-      button.onclick = () => Cart("Add", sorted[i].title, "Popular");
+      button.onclick = () => Cart("Add", current, location, array, parent);
       div.appendChild(button);
     } else {
-        let container = document.getElementById("contdiv" + i);
-        container === null ? null : Cardbody.removeChild(container);
+      let container = document.getElementById(location + current);
+      container === null ? null : parent.removeChild(container);
       let div = document.createElement("div");
       div.classList = "btn-group mx-2";
-      div.id = "contdiv" + i;
-      Cardbody.appendChild(div);
+      div.id = location + current;
+      parent.appendChild(div);
       let button1 = document.createElement("button");
       button1.classList = "btn btn-danger";
       button1.innerHTML = "-";
-      button1.onclick = () => Cart("-", sorted[i].title, "Popular");
+      button1.onclick = () => Cart("-", current, location, array, parent);
       div.appendChild(button1);
       let input = document.createElement("input");
       input.type = "text";
-      input.value = quantity;
+      input.value = array[current].quantity; // Use array[current].quantity
       input.id = "count";
       input.classList = "text-center btn";
       input.disabled = true;
@@ -72,27 +122,26 @@ const PopularCards = () => {
       let button2 = document.createElement("button");
       button2.classList = "btn btn-success";
       button2.innerHTML = "+";
-      button2.onclick = () => Cart("+", sorted[i].title, "Popular");
+      button2.onclick = () => Cart("+", current, location, array, parent);
       div.appendChild(button2);
     }
-  }
-};
+  };
 
-const Cart = (dir, title, loc) => {
+const Cart = (dir, current, loc, array, parent) => {
   for (const item of allproducts) {
-    if (item.title === title) {
-        if (dir === "Add") {
-            item.quantity++;
-            cart.push(item);
-        } else if (dir === "-") {
-            item.quantity--;
-        } else {
-            item.quantity++;
-        }
+    if (item.title === array[current].title) {
+      if (dir === "Add") {
+        item.quantity++;
+        cart.push(item);
+      } else if (dir === "-") {
+        item.quantity--;
+      } else {
+        item.quantity++;
+      }
       for (const item of cart) {
-        if (item.quantity === 0 && item.title === title) {
+        if (item.quantity === 0 && item.title === array[current].title) {
           cart.splice(cart.indexOf(item), 1);
-        } else if(item.title === title) {
+        } else if (item.title === array[current].title) {
           cart.splice(cart.indexOf(item), 1);
           cart.push(item);
         }
@@ -100,12 +149,12 @@ const Cart = (dir, title, loc) => {
       break;
     }
   }
-  if (loc === "Popular")PopularCards();
-  
-  if (cart.length === 0 ) {
+  checkCard(current, array, loc, parent);
+
+  if (cart.length === 0) {
     document.getElementById("itemcount1").innerHTML = null;
     document.getElementById("itemcount2").innerHTML = null;
-  }else{
+  } else {
     document.getElementById("itemcount1").innerHTML = cart.length;
     document.getElementById("itemcount2").innerHTML = cart.length;
   }
