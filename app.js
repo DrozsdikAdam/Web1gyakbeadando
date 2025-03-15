@@ -21,8 +21,7 @@ const fetchProducts = () => {
       generateCards("homePopular");
       generateCards("homeClothes");
       generateCards("homeJewelery");
-      //jewelery, electronics, men's clothing, woman's clothing,
-      //PopularCards();
+      generateCards("homeElectronics");
     });
   });
 };
@@ -47,8 +46,10 @@ const generateCards = (location) => {
       parent = document.getElementById("homeJewelery");
       for (let item of sorted) if (item.category === "jewelery")array.push(item);
       until = 3;
-    } else {
-      // Add logic for other categories if needed
+    } else  if (location === "homeElectronics") {
+        parent = document.getElementById("homeElectronics");
+        for (let item of sorted) if (item.category === "electronics")array.push(item);
+        until = 3;
     }
     for (let i = 0; i < until; i++) {
       let div = document.createElement("div");
