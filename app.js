@@ -243,7 +243,7 @@ const Cart = (dir, current, loc, array, parent) => {
       break;
     }
   }
-  checkCard(current, array, loc, parent);
+  //checkCard(current, array, loc, parent);
 
   if (cart.length === 0) {
     document.getElementById("itemcount1").innerHTML = null;
@@ -252,4 +252,8 @@ const Cart = (dir, current, loc, array, parent) => {
     document.getElementById("itemcount1").innerHTML = cart.length;
     document.getElementById("itemcount2").innerHTML = cart.length;
   }
+
+  /* localStorage.setItem('objektum', JSON.stringify(objektum));
+    localStorage.setItem('tomb', JSON.stringify(tomb));
+    localStorage.setItem('valtozo', valtozo); */
 };
