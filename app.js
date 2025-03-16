@@ -132,7 +132,7 @@ const checkCard = (current, array, location, parent) => {
     input.type = "text";
     input.value = array[current].quantity;
     input.id = location + current + "count";
-    input.classList = "text-center btn";
+    input.classList = "text-center btn counter";
     input.disabled = true;
     div.appendChild(input);
     let button2 = document.createElement("button");
