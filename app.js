@@ -216,8 +216,6 @@ const updateCards = (parent, loc, array, current) => {
       }
     }
   }
-
-  //nagy if be else ágba pedig be kell másolni és a check helyett egy quantity beírás a loc+szám+"count" formátumú index re
 };
 
 const Cart = (dir, current, loc, array, parent) => {
@@ -229,8 +227,10 @@ const Cart = (dir, current, loc, array, parent) => {
         updateCards(parent, loc, array, current);
       } else if (dir === "-") {
         item.quantity--;
+        updateCards(parent, loc, array, current);
       } else {
         item.quantity++;
+        updateCards(parent, loc, array, current);
       }
       for (const item of cart) {
         if (item.quantity === 0 && item.title === array[current].title) {
