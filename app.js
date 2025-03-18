@@ -24,7 +24,13 @@ const fetchProducts = (page) => {
       }
       allproducts = products;
       sorted = products.sort((a, b) => b.rating.rate - a.rating.rate);
-
+      for (let item of sorted) {
+        if (item.BigCategory === "Clothes") {
+          subarrayClothes.push(item);
+        }}
+      for (let item of sorted) if (item.category === "jewelery") subarrayJewelery.push(item);
+      for (let item of sorted)
+        if (item.category === "electronics") subarrayElectronics.push(item);
       if(page === "homePage")
       generateCards("homePopular");
       generateCards("homeClothes");
@@ -44,23 +50,15 @@ const generateCards = (location) => {
     until = 4;
   } else if (location === "homeClothes") {
     parent = document.getElementById("homeClothes");
-    for (let item of sorted) {
-      if (item.BigCategory === "Clothes") {
-        array.push(item);
-      }
-    }
-    subarrayClothes = array;
+    array = subarrayClothes;
     until = 4;
   } else if (location === "homeJewelery") {
     parent = document.getElementById("homeJewelery");
-    for (let item of sorted) if (item.category === "jewelery") array.push(item);
-    subarrayJewelery = array;
+    array = subarrayJewelery;
     until = 4;
   } else if (location === "homeElectronics") {
     parent = document.getElementById("homeElectronics");
-    for (let item of sorted)
-      if (item.category === "electronics") array.push(item);
-    subarrayElectronics = array;
+    array = subarrayElectronics;
     until = 4;
   }
   for (let i = 0; i < until; i++) {
