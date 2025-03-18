@@ -69,8 +69,9 @@ var br = document.createElement("br");
 div2.appendChild(br);
 var div3 = document.createElement("div3");
 div3.classList = "row";
-div3.id = "jewelryRow" + i;
+div3.id = "jeweleryRow" + i;
 div1.appendChild(div3);
+generateCards(div3.id);
   }
 }
 
@@ -94,6 +95,11 @@ const generateCards = (location) => {
     parent = document.getElementById("homeElectronics");
     array = subarrayElectronics;
     until = 4;
+  }
+  else if(location === "jeweleryRow1"){
+    parent = document.getElementById(location);
+    array = subarrayJewelery;
+    until = subarrayJewelery.length;
   }
   for (let i = 0; i < until; i++) {
     let div = document.createElement("div");
