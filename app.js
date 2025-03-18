@@ -5,12 +5,13 @@ var subarrayJewelery;
 var subarrayElectronics;
 var quantity = 0;
 var cart = [];
+var currentPage;
 
-const fetchProducts = () => {
+const fetchProducts = (page) => {
   fetch("https://fakestoreapi.com/products").then((res) => {
     res.json().then((response) => {
       console.log(response);
-
+      currentPage = page;
       let products = response;
       for (let product of products) {
         product.quantity = 0;
@@ -24,6 +25,7 @@ const fetchProducts = () => {
       allproducts = products;
       sorted = products.sort((a, b) => b.rating.rate - a.rating.rate);
 
+      if(page === "homePage")
       generateCards("homePopular");
       generateCards("homeClothes");
       generateCards("homeJewelery");
@@ -238,8 +240,11 @@ const Cart = (dir, current, loc, array, parent) => {
       break;
     }
   }
+  if(currentPage === "homePage"){
   updateCards(parent, loc, array, current);
   checkCard(current, array, loc, parent);
+  }
+  else checkCard(current, array, loc, parent);
 
   if (cart.length === 0) {
     document.getElementById("itemcount1").innerHTML = null;
