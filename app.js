@@ -26,10 +26,20 @@ const fetchProducts = (page) => {
       sorted = products.sort((a, b) => b.rating.rate - a.rating.rate);
       counter = 0;
 
-      const storedProducts = localStorage.getItem('Termékek');
+      // Ensure that the data is stored as JSON strings
       const storedCart = localStorage.getItem('Kosár');
-      allproducts = storedProducts ? JSON.parse(storedProducts) : allproducts;
       cart = storedCart ? JSON.parse(storedCart) : cart;
+      for (let item of allproducts)for(let cartitem of cart)if(item.title === cartitem.title)item.quantity = cartitem.quantity;
+
+      if (cart.length === 0) {
+        document.getElementById("itemcount1").innerHTML = null;
+        document.getElementById("itemcount2").innerHTML = null;
+      } else {
+        document.getElementById("itemcount1").innerHTML = cart.length;
+        document.getElementById("itemcount2").innerHTML = cart.length;
+      }
+      console.log(allproducts);
+
       for (let item of sorted) {
         if (item.BigCategory === "Clothes") subarrayClothes.push(item);
         if (item.category === "jewelery") subarrayJewelry.push(item);
@@ -43,10 +53,8 @@ const fetchProducts = (page) => {
       } else if (page === "jewelryPage") {
         generateRows(subarrayJewelry.length, "jewelryRow", "containerJewelry","Ékszerek");
       } else if (page === "clothesPage") {
-        console.log(subarrayClothes);
         generateRows(subarrayClothes.length, "clothesRow", "containerClothes","Ruhák");
       } else {
-        console.log(subarrayElectronics);
         generateRows(subarrayElectronics.length, "electronicsRow","containerElectronics","Elektronikai cikkek");
       }
     });
@@ -87,6 +95,7 @@ const generateCards = (location, rown) => {
   let array = [];
   let until;
   let from = 0;
+  console.log(location)
   if (location === "homePopular") {
     parent = document.getElementById("homePopular");
     array = sorted;
@@ -154,24 +163,55 @@ const generateCards = (location, rown) => {
     span2.classList = "price";
     span2.innerHTML = array[i].price + "$";
     p2.appendChild(span2);
-    generateButtons(array, div2, i, location+counter);
+    if (location === "jewelryRow" || location === "clothesRow" || location === "electronicsRow") generateButtons(array, div2, i, location+counter);
+    else generateButtons(array, div2, i, location);
   }
 };
 
 const generateButtons = (array, parent, current, location) => {
-  let div = document.createElement("div");
-  div.classList = "btn-group mx-2";
-  div.id = location + current;
-  parent.appendChild(div);
-  let button = document.createElement("button");
-  button.classList = "gomb text-center";
-  button.innerHTML = "Add";
-  button.onclick = () => Cart("Add", current, location, array, parent);
-  div.appendChild(button);
+  const isItemInCart = cart.some(item => item.title === array[current].title);
+  if(!isItemInCart){
+    let div = document.createElement("div");
+    div.classList = "btn-group mx-2";
+    div.id = location + current;
+    parent.appendChild(div);
+    let button = document.createElement("button");
+    button.classList = "gomb text-center";
+    button.innerHTML = "Add";
+    button.onclick = () => Cart("Add", current, location, array, parent);
+    div.appendChild(button);
+  }
+  else{
+    let container = document.getElementById(location + current);
+    container === null ? null : parent.removeChild(container);
+    let div = document.createElement("div");
+    div.classList = "btn-group mx-2";
+    div.id = location + current;
+    parent.appendChild(div);
+    let button1 = document.createElement("button");
+    button1.classList = "btn btn-danger";
+    button1.innerHTML = "-";
+    button1.onclick = () => Cart("-", current, location, array, parent);
+    div.appendChild(button1);
+    let input = document.createElement("input");
+    input.type = "text";
+    input.value = array[current].quantity;
+    input.id = location + current + "count";
+    input.classList = "text-center btn counter";
+    input.disabled = true;
+    div.appendChild(input);
+    let button2 = document.createElement("button");
+    button2.classList = "btn btn-success";
+    button2.innerHTML = "+";
+    button2.onclick = () => Cart("+", current, location, array, parent);
+    div.appendChild(button2);
+  }
+  
 };
 
 const checkCard = (current, array, location, parent) => {
   if (array[current].quantity === 0) {
+    console.log("ebbe is eljutott");
     let container = document.getElementById(location + current);
     container === null ? null : parent.removeChild(container);
     let div = document.createElement("div");
@@ -184,6 +224,7 @@ const checkCard = (current, array, location, parent) => {
     button.onclick = () => Cart("Add", current, location, array, parent);
     div.appendChild(button);
   } else {
+    console.log("eddig bejutott eljutott");
     let container = document.getElementById(location + current);
     container === null ? null : parent.removeChild(container);
     let div = document.createElement("div");
@@ -238,20 +279,26 @@ const updateCards = (parent, loc, array, current) => {
       }
     }
   } else if (array[current].category === "electronics") {
+    console.log("eddig eljutott");
     for (let i = 0; i < 4; i++) {
       if (array.length === 20) {
         if (array[current].title === subarrayElectronics[i].title) {
           loc = "homePopular";
+          console.log(loc+i);
           parent = document.getElementById(loc + current).parentElement;
           checkCard(current, sorted, loc, parent);
           loc = "homeElectronics";
+          console.log("eddig eljutott 2.");
           parent = document.getElementById(loc + i).parentElement;
           checkCard(i, subarrayElectronics, loc, parent);
+          console.log("eddig eljutott 3.");
         }
       } else {
         if (array[current].title === sorted[i].title) {
           loc = "homePopular";
+          console.log(loc+i);
           parent = document.getElementById(loc + i).parentElement;
+          
           checkCard(i, sorted, loc, parent);
           loc = "homeElectronics";
           parent = document.getElementById(loc + current).parentElement;
@@ -286,25 +333,27 @@ const updateCards = (parent, loc, array, current) => {
 };
 
 const Cart = (dir, current, loc, array, parent) => {
-  for (const item of allproducts) {
-    if (item.title === array[current].title) {
+  console.log(array)
+  for (const productitem of allproducts) {
+    if (productitem.title === array[current].title) {
       if (dir === "Add") {
-        item.quantity++;
-        cart.push(item);
-      } else if (dir === "-") item.quantity--;
-      else item.quantity++;
+        productitem.quantity++;
+        cart.push(productitem);
+      } else if (dir === "-") productitem.quantity--;
+      else productitem.quantity++;
 
       for (const item of cart) {
         if (item.quantity === 0 && item.title === array[current].title) {
           cart.splice(cart.indexOf(item), 1);
         } else if (item.title === array[current].title) {
           cart.splice(cart.indexOf(item), 1);
-          cart.push(item);
+          cart.push(productitem);
         }
       }
       break;
     }
   }
+
   if (currentPage === "homePage") {
     updateCards(parent, loc, array, current);
     checkCard(current, array, loc, parent);
@@ -318,7 +367,9 @@ const Cart = (dir, current, loc, array, parent) => {
     document.getElementById("itemcount2").innerHTML = cart.length;
   }
 
-    localStorage.setItem('Termékek',allproducts);
-    localStorage.setItem('Kosár', cart);
+  console.log("Saving to localStorage - cart:", cart);
+  localStorage.clear();
+  localStorage.setItem('Kosár', JSON.stringify(cart));
+  console.log(allproducts)
     //localStorage.setItem('valtozo', valtozo); 
 };
