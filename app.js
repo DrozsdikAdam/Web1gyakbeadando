@@ -31,12 +31,22 @@ const fetchProducts = (page) => {
       for (let item of sorted) if (item.category === "jewelery") subarrayJewelery.push(item);
       for (let item of sorted)
         if (item.category === "electronics") subarrayElectronics.push(item);
-      if(page === "homePage")
+      if(page === "homePage"){
       generateCards("homePopular");
       generateCards("homeClothes");
       generateCards("homeJewelery");
       generateCards("homeElectronics");
-    });
+    }
+    else if(page ==="jewelryPage"){
+generateRows(subarrayJewelery.length);
+    }
+    else if(page ==="clothesPage"){
+      generateRows(subarrayClothes.length);
+          }
+          else{
+            generateRows(subarrayElectronics.length);
+          }
+  });
   });
 };
 
