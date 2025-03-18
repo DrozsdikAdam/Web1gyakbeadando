@@ -1,8 +1,8 @@
 var allproducts;
 var sorted;
-var subarrayClothes;
-var subarrayJewelery;
-var subarrayElectronics;
+var subarrayClothes = [];
+var subarrayJewelery = [];
+var subarrayElectronics = [];
 var quantity = 0;
 var cart = [];
 var currentPage;
