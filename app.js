@@ -50,6 +50,30 @@ generateRows(subarrayJewelery.length);
   });
 };
 
+const generateRows = (num) => {
+  var container = document.getElementById("container");
+  for (let i = 0; i <num/4; i++){
+var src = document.createElement("section");
+src.classList = "bg-light text-dark p-5 text-center text-sm-start";
+container.appendChild(src);
+var div1 = document.createElement("div");
+div1.classList = "container";
+src.appendChild(div1);
+var div2 = document.createElement("div");
+div2.classList = "container-fluid mb-2";
+div1.appendChild(div2);
+var h1 = document.createElement("h1");
+h1.classList = "text-center mb-2";
+div2.appendChild(h1);
+var br = document.createElement("br");
+div2.appendChild(br);
+var div3 = document.createElement("div3");
+div3.classList = "row";
+div3.id = "jewelryRow" + i;
+div1.appendChild(div3);
+  }
+}
+
 const generateCards = (location) => {
   let parent;
   let array = [];
