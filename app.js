@@ -224,14 +224,9 @@ const Cart = (dir, current, loc, array, parent) => {
       if (dir === "Add") {
         item.quantity++;
         cart.push(item);
-        updateCards(parent, loc, array, current);
-      } else if (dir === "-") {
-        item.quantity--;
-        updateCards(parent, loc, array, current);
-      } else {
-        item.quantity++;
-        updateCards(parent, loc, array, current);
-      }
+      } else if (dir === "-") item.quantity--; 
+      else item.quantity++;
+      
       for (const item of cart) {
         if (item.quantity === 0 && item.title === array[current].title) {
           cart.splice(cart.indexOf(item), 1);
@@ -243,7 +238,8 @@ const Cart = (dir, current, loc, array, parent) => {
       break;
     }
   }
-  //checkCard(current, array, loc, parent);
+  updateCards(parent, loc, array, current);
+  checkCard(current, array, loc, parent);
 
   if (cart.length === 0) {
     document.getElementById("itemcount1").innerHTML = null;
