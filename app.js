@@ -1,12 +1,12 @@
 var allproducts;
 var sorted;
 var subarrayClothes = [];
-var subarrayJewelery = [];
+var subarrayJewelry = [];
 var subarrayElectronics = [];
 var quantity = 0;
 var cart = [];
 var currentPage;
-
+var counter;
 const fetchProducts = (page) => {
   fetch("https://fakestoreapi.com/products").then((res) => {
     res.json().then((response) => {
@@ -24,61 +24,69 @@ const fetchProducts = (page) => {
       }
       allproducts = products;
       sorted = products.sort((a, b) => b.rating.rate - a.rating.rate);
+      counter = 0;
+
+      const storedProducts = localStorage.getItem('Termékek');
+      const storedCart = localStorage.getItem('Kosár');
+      allproducts = storedProducts ? JSON.parse(storedProducts) : allproducts;
+      cart = storedCart ? JSON.parse(storedCart) : cart;
       for (let item of sorted) {
-        if (item.BigCategory === "Clothes") {
-          subarrayClothes.push(item);
-        }}
-      for (let item of sorted) if (item.category === "jewelery") subarrayJewelery.push(item);
-      for (let item of sorted)
+        if (item.BigCategory === "Clothes") subarrayClothes.push(item);
+        if (item.category === "jewelery") subarrayJewelry.push(item);
         if (item.category === "electronics") subarrayElectronics.push(item);
-      if(page === "homePage"){
-      generateCards("homePopular");
-      generateCards("homeClothes");
-      generateCards("homeJewelery");
-      generateCards("homeElectronics");
-    }
-    else if(page ==="jewelryPage"){
-generateRows(subarrayJewelery.length);
-    }
-    else if(page ==="clothesPage"){
-      generateRows(subarrayClothes.length);
-          }
-          else{
-            generateRows(subarrayElectronics.length);
-          }
-  });
+      }
+      if (page === "homePage") {
+        generateCards("homePopular");
+        generateCards("homeClothes");
+        generateCards("homeJewelry");
+        generateCards("homeElectronics");
+      } else if (page === "jewelryPage") {
+        generateRows(subarrayJewelry.length, "jewelryRow", "containerJewelry","Ékszerek");
+      } else if (page === "clothesPage") {
+        console.log(subarrayClothes);
+        generateRows(subarrayClothes.length, "clothesRow", "containerClothes","Ruhák");
+      } else {
+        console.log(subarrayElectronics);
+        generateRows(subarrayElectronics.length, "electronicsRow","containerElectronics","Elektronikai cikkek");
+      }
+    });
   });
 };
 
-const generateRows = (num) => {
-  var container = document.getElementById("container");
-  for (let i = 0; i <num/4; i++){
-var src = document.createElement("section");
-src.classList = "bg-light text-dark p-5 text-center text-sm-start";
-container.appendChild(src);
-var div1 = document.createElement("div");
-div1.classList = "container";
-src.appendChild(div1);
-var div2 = document.createElement("div");
-div2.classList = "container-fluid mb-2";
-div1.appendChild(div2);
-var h1 = document.createElement("h1");
-h1.classList = "text-center mb-2";
-div2.appendChild(h1);
-var br = document.createElement("br");
-div2.appendChild(br);
-var div3 = document.createElement("div3");
-div3.classList = "row";
-div3.id = "jeweleryRow" + i;
-div1.appendChild(div3);
-generateCards(div3.id);
+const generateRows = (num, rown,locationForRows,title) => {
+  var container = document.getElementById(locationForRows);
+  for (let i = 0; i < num / 4; i++) {
+    var sec = document.createElement("section");
+    if (i%2==0) sec.classList = "bg-light text-dark p-5 text-center text-sm-start";
+    else sec.classList = "bg-dark text-light p-5 text-center text-sm-start";
+    container.appendChild(sec);
+    var div1 = document.createElement("div");
+    div1.classList = "container";
+    sec.appendChild(div1);
+    var div2 = document.createElement("div");
+    div2.classList = "container-fluid mb-2";
+    div1.appendChild(div2);
+    if(i==0){
+      var h1 = document.createElement("h1");
+      h1.classList = "text-center mb-2";
+      h1.innerHTML = title;
+      div2.appendChild(h1);
+      var br = document.createElement("br");
+      div2.appendChild(br);
+    }
+    var div3 = document.createElement("div");
+    div3.classList = "row";
+    div3.id = rown + i;
+    div1.appendChild(div3);
+    generateCards(rown,i);
   }
-}
+};
 
-const generateCards = (location) => {
+const generateCards = (location, rown) => {
   let parent;
   let array = [];
   let until;
+  let from = 0;
   if (location === "homePopular") {
     parent = document.getElementById("homePopular");
     array = sorted;
@@ -87,21 +95,40 @@ const generateCards = (location) => {
     parent = document.getElementById("homeClothes");
     array = subarrayClothes;
     until = 4;
-  } else if (location === "homeJewelery") {
-    parent = document.getElementById("homeJewelery");
-    array = subarrayJewelery;
+  } else if (location === "homeJewelry") {
+    parent = document.getElementById("homeJewelry");
+    array = subarrayJewelry;
     until = 4;
   } else if (location === "homeElectronics") {
     parent = document.getElementById("homeElectronics");
     array = subarrayElectronics;
     until = 4;
+  } else if (location === "jewelryRow") {
+    parent = document.getElementById(location+counter);
+    array = subarrayJewelry;
+    if((subarrayJewelry.length - rown*4)<4)until = subarrayJewelry.length;
+    else if ((subarrayJewelry.length - rown*4)>4)until = 4+rown*4;
+    else until = subarrayJewelry.length - rown*4;
+    from = rown*4;
+    counter++;
+  } else if (location === "clothesRow") {
+    parent = document.getElementById(location+counter);
+    array = subarrayClothes;
+    if((subarrayClothes.length - rown*4)<4)until = subarrayClothes.length;
+    else if ((subarrayClothes.length - rown*4)>4)until = 4+rown*4;
+    else until = subarrayClothes.length - rown*4;
+    from = rown*4;
+    counter++;
+  } else if (location === "electronicsRow") {
+    parent = document.getElementById(location+counter);
+    array = subarrayElectronics;
+    if((subarrayElectronics.length - rown*4)<4)until = subarrayElectronics.length;
+    else if ((subarrayElectronics.length - rown*4)>4)until = 4+rown*4;
+    else until = subarrayElectronics.length - rown*4;
+    from = rown*4;
+    counter++;
   }
-  else if(location === "jeweleryRow1"){
-    parent = document.getElementById(location);
-    array = subarrayJewelery;
-    until = subarrayJewelery.length;
-  }
-  for (let i = 0; i < until; i++) {
+  for (let i = from; i < until; i++) {
     let div = document.createElement("div");
     div.classList = "card border border-dark-subtle mx-md-2 my-2 p-2 col-md";
     parent.appendChild(div);
@@ -127,7 +154,7 @@ const generateCards = (location) => {
     span2.classList = "price";
     span2.innerHTML = array[i].price + "$";
     p2.appendChild(span2);
-    generateButtons(array, div2, i, location);
+    generateButtons(array, div2, i, location+counter);
   }
 };
 
@@ -187,15 +214,15 @@ const updateCards = (parent, loc, array, current) => {
   if (array[current].category === "jewelery") {
     for (let i = 0; i < 4; i++) {
       if (array.length === 20) {
-        if (array[current].title === subarrayJewelery[i].title) {
+        if (array[current].title === subarrayJewelry[i].title) {
           loc = "homePopular";
 
           parent = document.getElementById(loc + current).parentElement;
           checkCard(current, sorted, loc, parent);
-          loc = "homeJewelery";
+          loc = "homeJewelry";
 
           parent = document.getElementById(loc + i).parentElement;
-          checkCard(i, subarrayJewelery, loc, parent);
+          checkCard(i, subarrayJewelry, loc, parent);
         }
       } else {
         if (array[current].title === sorted[i].title) {
@@ -203,10 +230,10 @@ const updateCards = (parent, loc, array, current) => {
           parent = document.getElementById(loc + i).parentElement;
 
           checkCard(i, sorted, loc, parent);
-          loc = "homeJewelery";
+          loc = "homeJewelry";
 
           parent = document.getElementById(loc + current).parentElement;
-          checkCard(current, subarrayJewelery, loc, parent);
+          checkCard(current, subarrayJewelry, loc, parent);
         }
       }
     }
@@ -264,9 +291,9 @@ const Cart = (dir, current, loc, array, parent) => {
       if (dir === "Add") {
         item.quantity++;
         cart.push(item);
-      } else if (dir === "-") item.quantity--; 
+      } else if (dir === "-") item.quantity--;
       else item.quantity++;
-      
+
       for (const item of cart) {
         if (item.quantity === 0 && item.title === array[current].title) {
           cart.splice(cart.indexOf(item), 1);
@@ -278,11 +305,10 @@ const Cart = (dir, current, loc, array, parent) => {
       break;
     }
   }
-  if(currentPage === "homePage"){
-  updateCards(parent, loc, array, current);
-  checkCard(current, array, loc, parent);
-  }
-  else checkCard(current, array, loc, parent);
+  if (currentPage === "homePage") {
+    updateCards(parent, loc, array, current);
+    checkCard(current, array, loc, parent);
+  } else checkCard(current, array, loc, parent);
 
   if (cart.length === 0) {
     document.getElementById("itemcount1").innerHTML = null;
@@ -292,7 +318,7 @@ const Cart = (dir, current, loc, array, parent) => {
     document.getElementById("itemcount2").innerHTML = cart.length;
   }
 
-  /* localStorage.setItem('objektum', JSON.stringify(objektum));
-    localStorage.setItem('tomb', JSON.stringify(tomb));
-    localStorage.setItem('valtozo', valtozo); */
+    localStorage.setItem('Termékek',allproducts);
+    localStorage.setItem('Kosár', cart);
+    //localStorage.setItem('valtozo', valtozo); 
 };
