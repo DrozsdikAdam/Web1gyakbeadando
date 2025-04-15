@@ -11,7 +11,7 @@
   <script src="Login.js"></script>
     <title>Login Page</title>
 </head>
-<body>
+<body onload="loadFunction()">
     <section class="p-5 text-center">
         <div class="container">
             <div class="row">
@@ -20,20 +20,20 @@
                     <div class="container text-center p-3" id="loginContainer">
                         <h1>Bejelentkezés</h1>
                         <hr>
-                        <form id="loginForm" onsubmit="CheckLogin();">
+                        <form id="loginForm">
                             <div class="input-group px-3">
                                 <Label class="input-group-text" id="basic-addon1">Fehasználónév: </Label>
-                                <input type="text" class="form-control" id="usern" placeholder="Fehasználónév" aria-describedby="basic-addon1">
+                                <input type="text" class="form-control" id="usern" placeholder="Fehasználónév" aria-describedby="basic-addon1" >
                             </div>
                             <br>
                             <div class="input-group px-3">
                                 <Label class="input-group-text" id="basic-addon1">Jelszó: </Label>
-                                <input type="password" class="form-control" id="passw" placeholder="Jelszó" aria-describedby="basic-addon1">
+                                <input type="password" class="form-control" id="passw" placeholder="Jelszó" aria-describedby="basic-addon1" >
                             </div>
                             <br>
                                 <div class="btn-group">
                                     <a href="/index.html" class="btn btn-primary">Főoldalra</a>
-                                    <button type="submit" class="btn btn-success">Bejelentkezés</button>
+                                    <button type="button" onclick="CheckLogin()" class="btn btn-success">Bejelentkezés</button>
                                     <a href="/registration.html" class="btn btn-primary">Regisztráció</a>
                                 </div>
                             
