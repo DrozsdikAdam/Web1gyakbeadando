@@ -18,22 +18,25 @@
                 <div class="col-md-4"></div>
                 <div class="col-md-4">
                     <div class="container text-center p-3" id="loginContainer">
-                        <h1>Login</h1>
+                        <h1>Bejelentkezés</h1>
                         <br>
                         <form id="loginForm" onsubmit="CheckLogin();">
                             <div class="input-group px-3">
                                 <Label class="input-group-text" id="basic-addon1">Fehasználónév: </Label>
-                                <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                                <input type="text" class="form-control" placeholder="Fehasználónév" aria-describedby="basic-addon1">
                             </div>
                             <br>
                             <div class="input-group px-3">
                                 <Label class="input-group-text" id="basic-addon1">Jelszó: </Label>
-                                <input type="password" class="form-control" placeholder="password" aria-describedby="basic-addon1">
+                                <input type="password" class="form-control" placeholder="Jelszó" aria-describedby="basic-addon1">
                             </div>
                             <br>
-                            <div class="input-group px-3">
-                                <button type="button" class="btn btn-primary text-center m-auto">Submit</button>
-                            </div>
+                                <div class="btn-group">
+                                    <a href="/index.html" class="btn btn-primary">Főoldalra</a>
+                                    <button type="submit" class="btn btn-success btn-outline-light">Bejelentkezés</button>
+                                    <a href="/registration.html" class="btn btn-primary">Regisztráció</a>
+                                </div>
+                            
                         </form>
                     </div>
                 </div>
