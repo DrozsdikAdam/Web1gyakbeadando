@@ -7,8 +7,10 @@ var quantity = 0;
 var cart = [];
 var currentPage;
 var counter;
+
 const fetchProducts = (page) => {
-  if (localStorage.getItem("currentUser") === null)localStorage.setItem('currentUser', JSON.stringify(null));
+  if (localStorage.getItem("currentUser") === null)
+    localStorage.setItem("currentUser", JSON.stringify(null));
   loginButton();
   fetch("https://fakestoreapi.com/products").then((res) => {
     res.json().then((response) => {
@@ -27,10 +29,11 @@ const fetchProducts = (page) => {
       sorted = products.sort((a, b) => b.rating.rate - a.rating.rate);
       counter = 0;
 
-      // Ensure that the data is stored as JSON strings
-      const storedCart = localStorage.getItem('Kosár');
+      const storedCart = localStorage.getItem("Kosár");
       cart = storedCart ? JSON.parse(storedCart) : cart;
-      for (let item of allproducts)for(let cartitem of cart)if(item.title === cartitem.title)item.quantity = cartitem.quantity;
+      for (let item of allproducts)
+        for (let cartitem of cart)
+          if (item.title === cartitem.title) item.quantity = cartitem.quantity;
 
       if (cart.length === 0) {
         document.getElementById("itemcount1").innerHTML = null;
@@ -51,21 +54,37 @@ const fetchProducts = (page) => {
         generateCards("homeJewelry");
         generateCards("homeElectronics");
       } else if (page === "jewelryPage") {
-        generateRows(subarrayJewelry.length, "jewelryRow", "containerJewelry","Ékszerek");
+        generateRows(
+          subarrayJewelry.length,
+          "jewelryRow",
+          "containerJewelry",
+          "Ékszerek"
+        );
       } else if (page === "clothesPage") {
-        generateRows(subarrayClothes.length, "clothesRow", "containerClothes","Ruhák");
+        generateRows(
+          subarrayClothes.length,
+          "clothesRow",
+          "containerClothes",
+          "Ruhák"
+        );
       } else {
-        generateRows(subarrayElectronics.length, "electronicsRow","containerElectronics","Elektronikai cikkek");
+        generateRows(
+          subarrayElectronics.length,
+          "electronicsRow",
+          "containerElectronics",
+          "Elektronikai cikkek"
+        );
       }
     });
   });
 };
 
-const generateRows = (num, rown,locationForRows,title) => {
+const generateRows = (num, rown, locationForRows, title) => {
   var container = document.getElementById(locationForRows);
   for (let i = 0; i < num / 4; i++) {
     var sec = document.createElement("section");
-    if (i%2==0) sec.classList = "bg-light text-dark p-5 text-center text-sm-start";
+    if (i % 2 == 0)
+      sec.classList = "bg-light text-dark p-5 text-center text-sm-start";
     else sec.classList = "bg-dark text-light p-5 text-center text-sm-start";
     container.appendChild(sec);
     var div1 = document.createElement("div");
@@ -74,7 +93,7 @@ const generateRows = (num, rown,locationForRows,title) => {
     var div2 = document.createElement("div");
     div2.classList = "container-fluid mb-2";
     div1.appendChild(div2);
-    if(i==0){
+    if (i == 0) {
       var h1 = document.createElement("h1");
       h1.classList = "text-center mb-2";
       h1.innerHTML = title;
@@ -86,7 +105,7 @@ const generateRows = (num, rown,locationForRows,title) => {
     div3.classList = "row";
     div3.id = rown + i;
     div1.appendChild(div3);
-    generateCards(rown,i);
+    generateCards(rown, i);
   }
 };
 
@@ -112,28 +131,29 @@ const generateCards = (location, rown) => {
     array = subarrayElectronics;
     until = 4;
   } else if (location === "jewelryRow") {
-    parent = document.getElementById(location+counter);
+    parent = document.getElementById(location + counter);
     array = subarrayJewelry;
-    if((subarrayJewelry.length - rown*4)<4)until = subarrayJewelry.length;
-    else if ((subarrayJewelry.length - rown*4)>4)until = 4+rown*4;
-    else until = subarrayJewelry.length - rown*4;
-    from = rown*4;
+    if (subarrayJewelry.length - rown * 4 < 4) until = subarrayJewelry.length;
+    else if (subarrayJewelry.length - rown * 4 > 4) until = 4 + rown * 4;
+    else until = subarrayJewelry.length - rown * 4;
+    from = rown * 4;
     counter++;
   } else if (location === "clothesRow") {
-    parent = document.getElementById(location+counter);
+    parent = document.getElementById(location + counter);
     array = subarrayClothes;
-    if((subarrayClothes.length - rown*4)<4)until = subarrayClothes.length;
-    else if ((subarrayClothes.length - rown*4)>4)until = 4+rown*4;
-    else until = subarrayClothes.length - rown*4;
-    from = rown*4;
+    if (subarrayClothes.length - rown * 4 < 4) until = subarrayClothes.length;
+    else if (subarrayClothes.length - rown * 4 > 4) until = 4 + rown * 4;
+    else until = subarrayClothes.length - rown * 4;
+    from = rown * 4;
     counter++;
   } else if (location === "electronicsRow") {
-    parent = document.getElementById(location+counter);
+    parent = document.getElementById(location + counter);
     array = subarrayElectronics;
-    if((subarrayElectronics.length - rown*4)<4)until = subarrayElectronics.length;
-    else if ((subarrayElectronics.length - rown*4)>4)until = 4+rown*4;
-    else until = subarrayElectronics.length - rown*4;
-    from = rown*4;
+    if (subarrayElectronics.length - rown * 4 < 4)
+      until = subarrayElectronics.length;
+    else if (subarrayElectronics.length - rown * 4 > 4) until = 4 + rown * 4;
+    else until = subarrayElectronics.length - rown * 4;
+    from = rown * 4;
     counter++;
   }
   for (let i = from; i < until; i++) {
@@ -162,14 +182,19 @@ const generateCards = (location, rown) => {
     span2.classList = "price";
     span2.innerHTML = array[i].price + "$";
     p2.appendChild(span2);
-    if (location === "jewelryRow" || location === "clothesRow" || location === "electronicsRow") generateButtons(array, div2, i, location+counter);
+    if (
+      location === "jewelryRow" ||
+      location === "clothesRow" ||
+      location === "electronicsRow"
+    )
+      generateButtons(array, div2, i, location + counter);
     else generateButtons(array, div2, i, location);
   }
 };
 
 const generateButtons = (array, parent, current, location) => {
-  const isItemInCart = cart.some(item => item.title === array[current].title);
-  if(!isItemInCart){
+  const isItemInCart = cart.some((item) => item.title === array[current].title);
+  if (!isItemInCart) {
     let div = document.createElement("div");
     div.classList = "btn-group mx-2";
     div.id = location + current;
@@ -179,8 +204,7 @@ const generateButtons = (array, parent, current, location) => {
     button.innerHTML = "Add";
     button.onclick = () => Cart("Add", current, location, array, parent);
     div.appendChild(button);
-  }
-  else{
+  } else {
     let container = document.getElementById(location + current);
     container === null ? null : parent.removeChild(container);
     let div = document.createElement("div");
@@ -205,7 +229,6 @@ const generateButtons = (array, parent, current, location) => {
     button2.onclick = () => Cart("+", current, location, array, parent);
     div.appendChild(button2);
   }
-  
 };
 
 const checkCard = (current, array, location, parent) => {
@@ -290,7 +313,7 @@ const updateCards = (parent, loc, array, current) => {
         if (array[current].title === sorted[i].title) {
           loc = "homePopular";
           parent = document.getElementById(loc + i).parentElement;
-          
+
           checkCard(i, sorted, loc, parent);
           loc = "homeElectronics";
           parent = document.getElementById(loc + current).parentElement;
@@ -332,9 +355,9 @@ const loginButton = () => {
   const logoutbtn2 = document.getElementById("logoutBtn2");
 
   if (currentUser === null) {
-    if(logoutbtn) loginButton.removeChild(logoutbtn);
-    if(logoutbtn2)loginButton2.removeChild(logoutbtn2);
-    console.log(loginButton)
+    if (logoutbtn) loginButton.removeChild(logoutbtn);
+    if (logoutbtn2) loginButton2.removeChild(logoutbtn2);
+    console.log(loginButton);
     let a = document.createElement("a");
     a.href = "/login.html";
     a.classList = "mx-md-2 nav-link loginBtn";
@@ -348,14 +371,12 @@ const loginButton = () => {
 
     loginButton.appendChild(a2);
     loginButton2.appendChild(a);
-    //<a href="/login.html" class="mx-md-2 nav-link" id="loginBtn">Login</a>
-  }
-  else{
+  } else {
     let a = document.createElement("a");
     a.onclick = () => Logout();
     a.title = "Logout";
     a.classList = "mx-md-2 nav-link loginBtn";
-    a.innerHTML = currentUser.username; 
+    a.innerHTML = currentUser.username;
     a.id = "logoutBtn1";
 
     let a2 = document.createElement("a");
@@ -367,14 +388,13 @@ const loginButton = () => {
     loginButton.appendChild(a);
     loginButton2.appendChild(a2);
   }
-
-}
+};
 
 const Logout = () => {
   alert("Kijelentkeztél");
   localStorage.setItem("currentUser", JSON.stringify(null));
   loginButton();
-  }
+};
 
 const Cart = (dir, current, loc, array, parent) => {
   for (const productitem of allproducts) {
@@ -411,6 +431,5 @@ const Cart = (dir, current, loc, array, parent) => {
   }
 
   localStorage.clear();
-  localStorage.setItem('Kosár', JSON.stringify(cart));
-    //localStorage.setItem('valtozo', valtozo); 
+  localStorage.setItem("Kosár", JSON.stringify(cart));
 };
