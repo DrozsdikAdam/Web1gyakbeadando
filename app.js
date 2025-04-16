@@ -9,7 +9,7 @@ var currentPage;
 var counter;
 const fetchProducts = (page) => {
   if (localStorage.getItem("currentUser") === null)localStorage.setItem('currentUser', JSON.stringify(null));
-
+  loginButton();
   fetch("https://fakestoreapi.com/products").then((res) => {
     res.json().then((response) => {
       currentPage = page;
@@ -323,6 +323,58 @@ const updateCards = (parent, loc, array, current) => {
     }
   }
 };
+
+const loginButton = () => {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const loginButton = document.getElementById("loginItem");
+  const loginButton2 = document.getElementById("loginItem2");
+  const logoutbtn = document.getElementById("logoutBtn1");
+  const logoutbtn2 = document.getElementById("logoutBtn2");
+
+  if (currentUser === null) {
+    if(logoutbtn) loginButton.removeChild(logoutbtn);
+    if(logoutbtn2)loginButton2.removeChild(logoutbtn2);
+    console.log(loginButton)
+    let a = document.createElement("a");
+    a.href = "/login.html";
+    a.classList = "mx-md-2 nav-link loginBtn";
+    a.innerHTML = "Login";
+    a.id = "loginBtn";
+    let a2 = document.createElement("a");
+    a2.href = "/login.html";
+    a2.classList = "mx-md-2 nav-link loginBtn";
+    a2.innerHTML = "Login";
+    a2.id = "loginBtn";
+
+    loginButton.appendChild(a2);
+    loginButton2.appendChild(a);
+    //<a href="/login.html" class="mx-md-2 nav-link" id="loginBtn">Login</a>
+  }
+  else{
+    let a = document.createElement("a");
+    a.onclick = () => Logout();
+    a.title = "Logout";
+    a.classList = "mx-md-2 nav-link loginBtn";
+    a.innerHTML = currentUser.username; 
+    a.id = "logoutBtn1";
+
+    let a2 = document.createElement("a");
+    a2.onclick = () => Logout();
+    a2.title = "Logout";
+    a2.classList = "mx-md-2 nav-link loginBtn";
+    a2.innerHTML = currentUser.username;
+    a2.id = "logoutBtn2";
+    loginButton.appendChild(a);
+    loginButton2.appendChild(a2);
+  }
+
+}
+
+const Logout = () => {
+  alert("Kijelentkeztél");
+  localStorage.setItem("currentUser", JSON.stringify(null));
+  loginButton();
+  }
 
 const Cart = (dir, current, loc, array, parent) => {
   for (const productitem of allproducts) {
