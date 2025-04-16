@@ -8,6 +8,8 @@ var cart = [];
 var currentPage;
 var counter;
 const fetchProducts = (page) => {
+  if (localStorage.getItem("currentUser") === null)localStorage.setItem('currentUser', JSON.stringify(null));
+
   fetch("https://fakestoreapi.com/products").then((res) => {
     res.json().then((response) => {
       currentPage = page;
