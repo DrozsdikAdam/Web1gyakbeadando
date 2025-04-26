@@ -8,7 +8,7 @@ var cart = [];
 var currentPage;
 var counter;
 
-const fetchProducts = (page) => {
+const fetchProducts = async (page) => {
   if (localStorage.getItem("currentUser") === null)
     localStorage.setItem("currentUser", JSON.stringify(null));
   loginButton();
@@ -16,6 +16,7 @@ const fetchProducts = (page) => {
     res.json().then((response) => {
       currentPage = page;
       let products = response;
+      console.log(products);
       for (let product of products) {
         product.quantity = 0;
         if (
@@ -357,7 +358,6 @@ const loginButton = () => {
   if (currentUser === null) {
     if (logoutbtn) loginButton.removeChild(logoutbtn);
     if (logoutbtn2) loginButton2.removeChild(logoutbtn2);
-    console.log(loginButton);
     let a = document.createElement("a");
     a.href = "/login.html";
     a.classList = "mx-md-2 nav-link loginBtn";
