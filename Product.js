@@ -2,13 +2,10 @@ const Init = () => {
     loginButton();
     var allproducts = JSON.parse(localStorage.getItem("Terméklista"));
     allproducts = allproducts.sort((a, b) => a.id - b.id)
-    console.log(allproducts);
     let tablebody = document.getElementById("productList");
-    console.log(tablebody);
     allproducts.forEach(element => {
         let row = document.createElement("tr");
         let cell = document.createElement("td");
-
         let img = document.createElement("img");
         img.src = element.image;
         img.style.width = "150px";
@@ -43,11 +40,7 @@ const Init = () => {
     });
 
     let counter = 0;
-    allproducts.forEach(element => {
-        if (element.quantity > 0)counter++;
-        
-    });
-    console.log(counter);
+    allproducts.forEach(element => {if (element.quantity > 0)counter++;});
     if (counter === 0) {
         document.getElementById("itemcount1").innerHTML = null;
         document.getElementById("itemcount2").innerHTML = null;

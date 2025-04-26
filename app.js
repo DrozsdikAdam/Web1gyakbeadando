@@ -198,7 +198,7 @@ const generateCards = (location, rown) => {
 
 const generateButtons = (array, parent, current, location) => {
   const isItemInCart = cart.some((item) => item.title === array[current].title);
-  if (!isItemInCart) {
+  if (!isItemInCart || array[current].quantity === 0) {
     let div = document.createElement("div");
     div.classList = "btn-group mx-2";
     div.id = location + current;
@@ -403,14 +403,14 @@ const Cart = (dir, current, loc, array, parent) => {
   for (const productitem of allproducts) {
     if (productitem.title === array[current].title) {
       if (dir === "Add") {
-        productitem.quantity++;
+        productitem.quantity = 1;
         cart.push(productitem);
-      } else if (dir === "-") productitem.quantity--;
+      } else if (dir === "-" && productitem.quantity > 0) productitem.quantity--;
       else productitem.quantity++;
       
 
       for (const item of cart) {
-        if (item.quantity === 0 && item.title === array[current].title) {
+        if (array[current].quantity === 0 && item.title === array[current].title) {
           cart.splice(cart.indexOf(item), 1);
         } else if (item.title === array[current].title) {
           cart.splice(cart.indexOf(item), 1);
@@ -418,9 +418,9 @@ const Cart = (dir, current, loc, array, parent) => {
         }
       }
 
-      break;
     }
   }
+ 
 
   
   if (currentPage === "homePage") {
@@ -435,9 +435,7 @@ const Cart = (dir, current, loc, array, parent) => {
     document.getElementById("itemcount1").innerHTML = cart.length;
     document.getElementById("itemcount2").innerHTML = cart.length;
   }
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  localStorage.clear();
-  localStorage.setItem("currentUser", JSON.stringify(currentUser));
+  console.log(cart);
   localStorage.setItem("Kosár", JSON.stringify(cart));
   localStorage.setItem("Terméklista", JSON.stringify(allproducts));
   console.log(allproducts);
