@@ -358,9 +358,13 @@ const loginButton = () => {
   const logoutbtn = document.getElementById("logoutBtn1");
   const logoutbtn2 = document.getElementById("logoutBtn2");
 
+  loginButton.innerHTML = '';
+  loginButton2.innerHTML = '';
+
   if (currentUser === null) {
     if (logoutbtn) loginButton.removeChild(logoutbtn);
     if (logoutbtn2) loginButton2.removeChild(logoutbtn2);
+
     let a = document.createElement("a");
     a.href = "/login.html";
     a.classList = "mx-md-2 nav-link loginBtn";
