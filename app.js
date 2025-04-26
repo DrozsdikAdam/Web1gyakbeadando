@@ -30,6 +30,9 @@ const fetchProducts = async (page) => {
       sorted = products.sort((a, b) => b.rating.rate - a.rating.rate);
       counter = 0;
 
+      if (localStorage.getItem("Terméklista") === null)
+        localStorage.setItem("Terméklista", JSON.stringify(allproducts));
+
       const storedCart = localStorage.getItem("Kosár");
       cart = storedCart ? JSON.parse(storedCart) : cart;
       for (let item of allproducts)
@@ -404,6 +407,7 @@ const Cart = (dir, current, loc, array, parent) => {
         cart.push(productitem);
       } else if (dir === "-") productitem.quantity--;
       else productitem.quantity++;
+      
 
       for (const item of cart) {
         if (item.quantity === 0 && item.title === array[current].title) {
@@ -413,10 +417,12 @@ const Cart = (dir, current, loc, array, parent) => {
           cart.push(productitem);
         }
       }
+
       break;
     }
   }
 
+  
   if (currentPage === "homePage") {
     updateCards(parent, loc, array, current);
     checkCard(current, array, loc, parent);
@@ -429,7 +435,10 @@ const Cart = (dir, current, loc, array, parent) => {
     document.getElementById("itemcount1").innerHTML = cart.length;
     document.getElementById("itemcount2").innerHTML = cart.length;
   }
-
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   localStorage.clear();
+  localStorage.setItem("currentUser", JSON.stringify(currentUser));
   localStorage.setItem("Kosár", JSON.stringify(cart));
+  localStorage.setItem("Terméklista", JSON.stringify(allproducts));
+  console.log(allproducts);
 };
