@@ -362,9 +362,6 @@ const loginButton = () => {
   loginButton2.innerHTML = '';
 
   if (currentUser === null) {
-    if (logoutbtn) loginButton.removeChild(logoutbtn);
-    if (logoutbtn2) loginButton2.removeChild(logoutbtn2);
-
     let a = document.createElement("a");
     a.href = "/login.html";
     a.classList = "mx-md-2 nav-link loginBtn";
@@ -398,7 +395,7 @@ const loginButton = () => {
 };
 
 const Logout = () => {
-  alert("Kijelentkeztél");
+  //alert("Kijelentkeztél");
   localStorage.setItem("currentUser", JSON.stringify(null));
   loginButton();
 };
