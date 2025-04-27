@@ -83,4 +83,16 @@ const cartPage = () => {
 
     
 }
-    }
+
+const checkout = () => {
+    const allproducts = JSON.parse(localStorage.getItem("Terméklista"));
+    allproducts.forEach(element => {
+        element.quantity = 0;
+    });
+    localStorage.setItem("Terméklista", JSON.stringify(allproducts));
+    localStorage.setItem("Kosár", JSON.stringify([]));
+    alert("Köszönjük a vásárlást!");
+    window.location.href = "index.html";
+
+
+}
