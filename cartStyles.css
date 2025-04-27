@@ -1,0 +1,10 @@
+.containerdiv{
+    background-color: lightblue;
+    padding: 10px;
+    border-radius: 5px;
+}
+.product-name{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 200px;
+}
