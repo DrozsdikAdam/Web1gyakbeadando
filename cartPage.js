@@ -10,4 +10,23 @@ const cartPage = () => {
     let totalPrice = 0;
     cartContainer.innerHTML = "";
 
-}
+    let counter = Products.length;
+    if (counter === 0) {
+        document.getElementById("itemcount1").innerHTML = null;
+        document.getElementById("itemcount2").innerHTML = null;
+      } else {
+        document.getElementById("itemcount1").innerHTML = counter;
+        document.getElementById("itemcount2").innerHTML = counter;
+      }
+
+      if(currentUser === null){
+        setTimeout(()=>{
+            alert("Ha fizetni szeretnél jelentkezz be!");
+        },2000);
+        paybtn.disabled = true;
+      }else{
+        paybtn.disabled = false;
+      }
+    
+
+    }
