@@ -34,11 +34,17 @@
                             <div class="input-group px-3">
                                 <Label class="input-group-text" id="basic-addon1">Jelszó: </Label>
                                 <input type="password" class="form-control" id="passw" placeholder="Jelszó" aria-describedby="basic-addon1" >
+                                <div class="input-group-text">
+                                    <button type="button" onclick="showPassword(event, 'eye')"><i class="bi bi-eye-slash" id="eye"></i></button>
+                                </div>
                             </div>
                             <br>
                             <div class="input-group px-3">
                                 <Label class="input-group-text" id="basic-addon1">Jelszó újra: </Label>
                                 <input type="password" class="form-control" id="passwagain" placeholder="Jelszó újra" aria-describedby="basic-addon1" >
+                                <div class="input-group-text">
+                                    <button type="button" onclick="showPassword(event, 'eye2')"><i class="bi bi-eye-slash" id="eyeagain"></i></button>
+                                </div>
                             </div>
                             <br>
                                 <div class="btn-group">

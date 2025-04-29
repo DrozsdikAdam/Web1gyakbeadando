@@ -72,3 +72,30 @@ const Registration = () => {
   window.location.href = "index.html";
   alert("Sikeres regisztráció!");
 }
+
+const showPassword = (e, eye) => {
+  e.preventDefault(); // Prevent any default behavior
+  const passwordInput = document.getElementById("passw");
+  const eyeIcon = document.getElementById("eye");
+  const eyeIcon2 = document.getElementById("eyeagain");
+  const passwordInput2 = document.getElementById("passwagain");
+
+  if (passwordInput.type === "password" && eye === "eye") {
+    passwordInput.type = "text";
+    eyeIcon.classList.remove("bi-eye-slash");
+    eyeIcon.classList.add("bi-eye");
+  } else {
+    passwordInput.type = "password";
+    eyeIcon.classList.remove("bi-eye");
+    eyeIcon.classList.add("bi-eye-slash");
+  }
+  if (passwordInput2.type === "password" && passwordInput2 !== null && eye === "eye2") {
+    passwordInput2.type = "text";
+    eyeIcon2.classList.remove("bi-eye-slash");
+    eyeIcon2.classList.add("bi-eye");
+  } else {
+    passwordInput2.type = "password";
+    eyeIcon2.classList.remove("bi-eye");
+    eyeIcon2.classList.add("bi-eye-slash");
+  }
+};
