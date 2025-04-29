@@ -79,7 +79,7 @@ const showPassword = (e, eye) => {
   const eyeIcon = document.getElementById("eye");
   const eyeIcon2 = document.getElementById("eyeagain");
   const passwordInput2 = document.getElementById("passwagain");
-
+  console.log(passwordInput2);
   if (passwordInput.type === "password" && eye === "eye") {
     passwordInput.type = "text";
     eyeIcon.classList.remove("bi-eye-slash");
@@ -89,13 +89,16 @@ const showPassword = (e, eye) => {
     eyeIcon.classList.remove("bi-eye");
     eyeIcon.classList.add("bi-eye-slash");
   }
-  if (passwordInput2.type === "password" && passwordInput2 !== null && eye === "eye2") {
-    passwordInput2.type = "text";
-    eyeIcon2.classList.remove("bi-eye-slash");
-    eyeIcon2.classList.add("bi-eye");
-  } else {
-    passwordInput2.type = "password";
-    eyeIcon2.classList.remove("bi-eye");
-    eyeIcon2.classList.add("bi-eye-slash");
+  if (passwordInput2 !== null){
+    if (passwordInput2.type === "password" && eye === "eye2") {
+      passwordInput2.type = "text";
+      eyeIcon2.classList.remove("bi-eye-slash");
+      eyeIcon2.classList.add("bi-eye");
+    } else {
+      passwordInput2.type = "password";
+      eyeIcon2.classList.remove("bi-eye");
+      eyeIcon2.classList.add("bi-eye-slash");
+    }
   }
+  
 };
